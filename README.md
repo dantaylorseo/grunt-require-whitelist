@@ -43,7 +43,7 @@ In this example, we validate the require statements in all .js files contained w
 grunt.initConfig({
   require_whitelist: {
     options: {},
-    src: ['lib/**/*.js']
+    src: ['app.js','lib/**/*.js']
   },
 })
 ```
