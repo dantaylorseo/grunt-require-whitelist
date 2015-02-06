@@ -26,8 +26,7 @@ module.exports = function (grunt) {
         'crypto', 'dns', 'http', 'https', 'path', 'url',
         
         //engineering white-listed modules
-        //'soap', 'moment',
-        'apnagent', 'futures', 'goo.gl', 'mustache', 'request','timezone-js', 'twilio', 'underscore', 'underscore.string',
+        'soap', 'moment', 'apnagent', 'futures', 'goo.gl', 'mustache', 'request','timezone-js', 'twilio', 'underscore', 'underscore.string',
         'ursa', 'validator', 'weather', 'xmldoc', 'xmldom', 'xpath', 'agentjs-commonlib', 'live-chat', 'vnodelib'
       ],
     
@@ -50,17 +49,16 @@ module.exports = function (grunt) {
         
         //we allow all local requires
         if(requireString.indexOf('.') === 0){
-            //console.log('local OK');
             require.allowed = true;
             require.reason  = 'local';
         }
         else{
+            //check if the module is on the whitelist
             var indexOf = grunt.util._.indexOf(options.allow, requireString);
             if(indexOf !== -1){
                 require.allowed = true;
                require.reason = 'whitelisted';
             }
-            //console.log('indexOf='+ indexOf +' allowed='+allowed);
         }
     
         return require;
@@ -80,26 +78,17 @@ module.exports = function (grunt) {
         
         var opts = { nodes: true, parse: { range: true, loc: true } };
       
-        var filename = '/Users/mcasella/workspace/NinaScript/USAA/workspace/whitelist/' + filepath;
-        //console.log(filename);
-        //console.log(grunt.file.read(filename));
-       
-        
-        
+        var filename = filepath;
         
         if(!grunt.file.isDir(filename)){
             var file = fs.readFileSync(filename);
             var requires = detective.find(file, opts);
-            //console.dir(requires);
        
             if(requires){
                 for(var i=0; i < requires.nodes.length; i++)
                 {
                     var temp = { file: filepath, requireString: requires.strings[i], line: requires.nodes[i].loc.start.line};
-                    //console.dir(temp);
-                    
                     var require = checkRequire(temp);
-                    //console.dir(require);
                     
                     logRequire(require);
                     
@@ -111,7 +100,9 @@ module.exports = function (grunt) {
         }
         next();
         
-    }, function(err) { 
+    }, 
+        //when we are done validating files
+        function(err) { 
         grunt.log.writeln("");
         if(errorRequires.length > 0)
         {   
@@ -127,9 +118,6 @@ module.exports = function (grunt) {
             grunt.log.ok("All require statements passed validation");
             done();
         }
-    
     });
   });
-
-
 };
