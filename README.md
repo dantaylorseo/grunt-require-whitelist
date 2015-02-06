@@ -1,4 +1,4 @@
-# require-whitelist
+# grunt-require-whitelist
 
 > Validate your NinaScript package to ensure required modules are on the Engineering whitelist
 
@@ -8,13 +8,13 @@ This plugin requires Grunt.
 If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
 
 ```shell
-npm install require-whitelist --save-dev
+npm install git://github.com/VirtuOz/grunt-require-whitelist --save-dev
 ```
 
 Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
 
 ```js
-grunt.loadNpmTasks('require-whitelist');
+grunt.loadNpmTasks('grunt-require-whitelist');
 ```
 
 ## The "require_whitelist" task

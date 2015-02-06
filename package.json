@@ -1,5 +1,5 @@
 {
-  "name": "require-whitelist",
+  "name": "grunt-require-whitelist",
   "version": "0.0.1",
   "description": "Validate your NinaScript package to ensure required modules are on the Engineering whitelist",
   "repository": "",

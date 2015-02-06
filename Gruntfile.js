@@ -1,5 +1,5 @@
 /*
- * require-whitelist
+ * grunt-require-whitelist
  * 
  *
  * Copyright (c) 2015 Matt Casella
