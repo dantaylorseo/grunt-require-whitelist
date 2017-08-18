@@ -40,6 +40,19 @@ module.exports = function (grunt) {
       }
       
     },
+    dependencyCheck: {
+      default: {
+        files: ['app.js', './lib/**/*.js'], // same as --entry
+        options: {
+          package: '.',
+          missing: true,
+          unused: true,
+          excludeUnusedDev: false,
+          ignoreUnused: [],
+          noDefaultEntries: true
+        }
+      }
+    },
 
     // Unit tests.
     nodeunit: {
