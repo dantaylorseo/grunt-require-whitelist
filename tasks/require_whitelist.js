@@ -74,50 +74,60 @@ module.exports = function (grunt) {
         
     }
 
-    async.forEach(this.filesSrc, function(filepath, next) {
-        
-        var opts = { nodes: true, parse: { range: true, loc: true } };
-      
-        var filename = filepath;
-        
-        if(!grunt.file.isDir(filename)){
-            var file = fs.readFileSync(filename);
-            var requires = detective.find(file, opts);
-       
-            if(requires){
-                for(var i=0; i < requires.nodes.length; i++)
-                {
-                    var temp = { file: filepath, requireString: requires.strings[i], line: requires.nodes[i].loc.start.line};
-                    var require = checkRequire(temp);
-                    
-                    logRequire(require);
-                    
-                    if(!require.allowed){
-                        errorRequires.push(require); 
+
+    async.each(this.filesSrc, function(filepath, next) {
+    
+            var opts = { nodes: true, parse: { range: true, loc: true } };
+          
+            var filename = filepath;
+            
+            if(!grunt.file.isDir(filename)){
+                var file = fs.readFileSync(filename);
+                var requires = detective.find(file, opts);
+           
+                if(requires){
+                    for(var i=0; i < requires.nodes.length; i++)
+                    {
+                        var temp = { file: filepath, requireString: requires.strings[i], line: requires.nodes[i].loc.start.line};
+                        var require = checkRequire(temp);
+                        
+                        logRequire(require);
+                        
+                        if(!require.allowed){
+                            errorRequires.push(require); 
+                        }
                     }
                 }
             }
-        }
-        next();
-        
-    }, 
-        //when we are done validating files
-        function(err) { 
-        grunt.log.writeln("");
-        if(errorRequires.length > 0)
-        {   
-            grunt.log.error("The following require statements are not allowed:");
-            errorRequires.forEach(function(require){
-                                    grunt.log.write("\t");
-                                    logRequire(require);
-                                });
-            done(false);
-        }
-        else
-        {
-            grunt.log.ok("All require statements passed validation");
-            done();
+            next();
+            
+            
+    }, function(err) {
+        // if any of the file processing produced an error, err would equal that error
+        if( err ) {
+          // One of the iterations produced an error.
+          // All processing will now stop.
+          console.log('A file failed to process');
+        } else {
+            grunt.log.writeln("");
+            if(errorRequires.length > 0)
+            {   
+                grunt.log.error("The following require statements are not allowed:");
+                errorRequires.forEach(function(require){
+                                        grunt.log.write("\t");
+                                        logRequire(require);
+                                    });
+                done(false);
+            }
+            else
+            {
+                grunt.log.ok("All require statements passed validation");
+                done();
+            }
         }
     });
+
+
+
   });
 };
