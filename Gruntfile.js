@@ -1,6 +1,6 @@
 /*
  * grunt-require-whitelist
- * 
+ *
  *
  * Copyright (c) 2015 Matt Casella
  * Licensed under the MIT license.
@@ -38,7 +38,7 @@ module.exports = function (grunt) {
         },
         src: ['../lib/**/*']
       }
-      
+
     },
     dependencyCheck: {
       default: {
@@ -69,6 +69,20 @@ module.exports = function (grunt) {
   //grunt.registerTask('test', ['clean', 'require_whitelist', 'nodeunit']);
 
   // By default, lint and run all tests.
-  grunt.registerTask('default', ['jshint', 'require_whitelist']);
+  grunt.registerTask('default', ['jshint', 'require_whitelist', 'dependencyCheck']);
+
+  var match = false;
+
+  grunt.warn = function (str) {
+    if (/Dependencies not listed/.test(str)) {
+      match = true;
+    }
+  };
+
+  process.on('exit', function () {
+    if (!match) {
+      process.exit(1);
+    }
+  });
 
 };
