@@ -14,6 +14,7 @@ module.exports = function (grunt) {
       noDefaultEntries: true
     });
 
+
     dependencyCheck({
       entries: this.filesSrc.map(function (el) {
         return path.relative(opts.package, el);
